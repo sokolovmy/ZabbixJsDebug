@@ -1,0 +1,10 @@
+.git/**
+.github/**
+.vscode/**
+test/**
+docs/**
+*.vsix
+package-lock.json
+.prettier*
+.editorconfig
+src/DEVELOPMENT.md

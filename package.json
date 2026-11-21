@@ -1,0 +1,119 @@
+{
+  "name": "zabbix-js-debug",
+  "displayName": "Zabbix JS Debug",
+  "publisher": "local-tools",
+  "version": "0.1.5",
+  "description": "Debug Zabbix JavaScript preprocessing and script items locally in VS Code.",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "main": "./src/extension.js",
+  "activationEvents": [
+    "onDebugResolve:zabbix-js",
+    "onDebugInitialConfigurations",
+    "onDebugDynamicConfigurations"
+  ],
+  "capabilities": {
+    "untrustedWorkspaces": {
+      "supported": false
+    }
+  },
+  "scripts": {
+    "test": "node --test test/*.test.cjs",
+    "build": "vsce package --out extension.vsix",
+    "format": "prettier --write src test eslint eslint.config.cjs"
+  },
+  "contributes": {
+    "commands": [
+      {
+        "command": "zabbixJs.start",
+        "title": "Zabbix JS Debug: Debug Active Script"
+      }
+    ],
+    "debuggers": [
+      {
+        "type": "zabbix-js",
+        "label": "Zabbix JS Debug",
+        "languages": [
+          "javascript"
+        ],
+        "initialConfigurations": [
+          {
+            "type": "zabbix-js",
+            "request": "launch",
+            "name": "Zabbix JS Debug"
+          }
+        ]
+      }
+    ],
+    "configuration": {
+      "title": "Zabbix JS Debug",
+      "properties": {
+        "zabbixJsDebug.runtime": {
+          "type": "string",
+          "default": "node",
+          "description": "Runtime used for local execution.",
+          "scope": "resource",
+          "enum": [
+            "node",
+            "duktape"
+          ]
+        },
+        "zabbixJsDebug.runtimePath": {
+          "type": "string",
+          "default": "",
+          "description": "Executable path. Leave empty to use the runtime on PATH.",
+          "scope": "resource"
+        },
+        "zabbixJsDebug.inputFile": {
+          "type": "string",
+          "default": "${fileDirname}/${fileBasenameNoExtension}.value",
+          "description": "Path to a JSON input file containing value or params.",
+          "scope": "resource"
+        },
+        "zabbixJsDebug.macrosFile": {
+          "type": "string",
+          "default": "${workspaceFolder}/.zabbix/macros.json",
+          "description": "Path to a JSON file containing Zabbix user macros.",
+          "scope": "resource"
+        },
+        "zabbixJsDebug.duktapeAdapterPath": {
+          "type": "string",
+          "default": "",
+          "description": "Optional path to an external stdio debug adapter."
+        },
+        "zabbixJsDebug.naming": {
+          "type": "string",
+          "enum": [
+            "modern",
+            "legacy"
+          ],
+          "default": "modern",
+          "scope": "resource",
+          "description": "API naming: modern (from 5.4) or legacy (before 5.4). Not a server version simulator."
+        }
+      }
+    },
+    "views": {
+      "debug": [
+        {
+          "id": "zabbixJs.macros",
+          "name": "Macro",
+          "when": "zabbixJs.hasMacroSnapshot"
+        }
+      ]
+    }
+  },
+  "license": "MIT",
+  "categories": [
+    "Debuggers"
+  ],
+  "devDependencies": {
+    "@vscode/vsce": "3.6.2",
+    "prettier": "3.5.3"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/YOUR-OWNER/zabbix-js-debug.git"
+  }
+}
